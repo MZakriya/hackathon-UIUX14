@@ -1,210 +1,221 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
+
+import Link from "next/link";
 import Image from "next/image";
-import { FaHeart, FaShareAlt, FaExchangeAlt, FaSlidersH, FaThLarge } from "react-icons/fa";
-import "@fortawesome/fontawesome-free/css/all.min.css";
-import { client } from "@/sanity/lib/client"; // Import the Sanity client
-import { urlForImage } from "@/sanity/lib/image"; // Import the urlForImage function
+import { client } from "@/sanity/lib/client";
+import ShopHeader from "@/components/shop-header";
+import FeatureSection from "@/components/feacturesSection";
 
-const ShopPage = () => {
-  const [products, setProducts] = useState<any[]>([]); // Store products data
-  const [show, setShow] = useState(16); // Default number of items per page
-  const [sortBy, setSortBy] = useState("Default"); // Default sort option
-  const [currentPage, setCurrentPage] = useState(1);
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  slug: string;
+}
 
-  // Fetch data from Sanity
+interface SanityProduct {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  price: number;
+  productImage: string | null;
+}
+
+const ITEMS_PER_PAGE = 8; // Display 6 products per page
+function ProductSection() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [priceRange, setPriceRange] = useState<number>(500); // Default price range
+  const [category, setCategory] = useState<string>("all"); // Default category
+  const [showFilters, setShowFilters] = useState<boolean>(false); // Toggle filters visibility
+
+  const [currentPage, setCurrentPage] = useState<number>(1); // Current page
+  
   useEffect(() => {
     const fetchProducts = async () => {
-      const data = await client.fetch(`
-        *[_type == "product"] | order(title asc) {
-          _id,
-          image,
-          title,
-          subtitle,
-          "slug": slug.current,
-          originalPrice,
-          previousPrice,
-          discountTag
-        }
-      `);
-      setProducts(data); // Set fetched products in state
+      const query = `*[_type == "product"] {
+        _id,
+        title,
+        "slug": slug.current,
+        description,
+        price,
+        "productImage": productImage.asset->url,
+      }`;
+
+      try {
+        const sanityProducts: SanityProduct[] = await client.fetch(query);
+        const formattedProducts = sanityProducts.map((product) => ({
+          id: product._id,
+          name: product.title || "Unnamed Product",
+          slug: product.slug,
+          description: product.description
+            ? product.description.split(" ").slice(0, 20).join(" ") + "..."
+            : "No description available",
+          price: product.price,
+          image: product.productImage || "/placeholder.jpg",
+        }));
+        setProducts(formattedProducts);
+        setFilteredProducts(formattedProducts); // Initialize with all products
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
     };
 
     fetchProducts();
-  }, []); // Run once on component mount
+  }, []);
 
-  const handleShowChange = (newShow: number) => {
-    setShow(newShow);
+  const applyFilters = () => {
+    const filtered = products.filter(
+      (product) =>
+        product.price <= priceRange &&
+        (category === "all" ||
+          product.name.toLowerCase().includes(category.toLowerCase()))
+    );
+    setFilteredProducts(filtered);
+    setCurrentPage(1); // Reset to the first page
   };
 
-  const handleSortChange = (newSortBy: string) => {
-    setSortBy(newSortBy);
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const handleNext = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
+    // Calculate pagination data
+    const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+    const paginatedProducts = filteredProducts.slice(
+      (currentPage - 1) * ITEMS_PER_PAGE,
+      currentPage * ITEMS_PER_PAGE
+    );
 
   return (
     <div>
-      <div className="relative">
-        <Image
-          src="/blog.png"
-          alt="Hero Image"
-          width={1600} // Adjust width to be responsive
-          height={600} // Adjust height accordingly
-          className="w-full h-[400px] object-cover"
-        />
-        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 text-center">
-          <Image
-            src="/logo.png"
-            alt="Logo"
-            width={80} // Adjusted for logo size
-            height={80}
-            className="w-20 h-20 object-contain cursor-pointer"
-          />
-          <div className="mt-4">
-            <h1 className="text-4xl font-bold text-gray-800">Shop</h1>
-            <p className="text-gray-600 text-lg">Home &gt; Shop</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Filters and Sort Options */}
-      <div className="h-auto bg-selfcolors-lightCream flex flex-col sm:flex-row items-center justify-between py-4 px-2 sm:px-6">
-        <div className="flex flex-wrap items-center justify-evenly sm:justify-between w-full space-x-3 sm:space-x-6">
-          <div className="flex items-center space-x-2 cursor-pointer">
-            <FaSlidersH size={28} />
-            <h3 className="text-[14px] sm:text-[16px] md:text-[18px] font-semibold">
-              Filter
-            </h3>
-          </div>
-          <FaThLarge size={25} />
-          <div className="flex flex-col items-center justify-center space-y-1">
-            <div className="h-[2px] w-[20px] bg-black"></div>
-            <div className="h-[8px] w-[25px] bg-black"></div>
-            <div className="h-[2px] w-[20px] bg-black"></div>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-4 w-full">
-          <span className="text-xs sm:text-sm md:text-base">
-            Showing 1–{show} of {products.length} results
-          </span>
-          <div
-            className="flex items-center space-x-2 cursor-pointer"
-            onClick={() => handleShowChange(show === 16 ? 32 : 16)}
-          >
-            <span className="text-xs sm:text-sm md:text-base">Show</span>
-            <div className="w-[45px] sm:w-[55px] h-[45px] sm:h-[55px] bg-white flex items-center justify-center rounded-md">
-              <h3 className="text-[#9F9F9F] text-xs sm:text-sm md:text-base">
-                {show}
-              </h3>
-            </div>
-          </div>
-          <div
-            className="flex items-center space-x-2 cursor-pointer"
-            onClick={() =>
-              handleSortChange(sortBy === "Default" ? "Price" : "Default")
-            }
-          >
-            <span className="text-xs sm:text-sm md:text-base">Sort by</span>
-            <div className="w-[45px] sm:w-[55px] h-[45px] sm:h-[55px] bg-white flex items-center justify-center rounded-md">
-              <h3 className="text-[#9F9F9F] text-xs sm:text-sm md:text-base">
-                {sortBy}
-              </h3>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Display Products */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {products
-          .slice((currentPage - 1) * show, currentPage * show)
-          .map((product) => (
-            <div
-              key={product._id}
-              className="text-center border p-4 rounded-lg relative hover:scale-95 transition-transform group"
-            >
-              <div className="relative">
-                {/* Ensure image source is valid */}
-                {product.image && product.image !== "" ? (
-                  <Image
-                    src={urlForImage(product.image).url()} // Use urlForImage to fetch image URL
-                    alt={product.title}
-                    width={500}
-                    height={500}
-                    className="w-full object-cover"
-                  />
-                ) : (
-                  // Fallback image when image is missing, invalid, or empty string
-                  <div className="w-full h-[500px] bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-500">No Image Available</span>
-                  </div>
-                )}
-                <div
-                  className={`absolute top-0 right-0 text-white text-xs font-semibold px-2 py-1 rounded-br-lg ${product.discountTag ? "bg-red-500" : ""}`}
-                >
-                  {product.discountTag}
-                </div>
-              </div>
-              <h3 className="text-md font-semibold mt-2">{product.title}</h3>
-              <p className="text-gray-500 text-sm">{product.subtitle}</p>
-              <p className="text-gray-500 font-bold line-through">
-                {product.originalPrice}
-              </p>
-              <p className="text-gray-800 font-bold">{product.previousPrice}</p>
-
-              <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
-      
-                  <button className="bg-white text-black py-2 px-4 rounded-lg text-lg font-semibold">
-                    Add to Cart
-                  </button>
-          
-                <div className="mt-4 flex gap-6 text-white">
-                  <button className="hover:text-gray-300 transition-colors duration-200 ease-in-out flex flex-col items-center">
-                    <FaShareAlt className="mb-1" />
-                    Share
-                  </button>
-                  <button className="hover:text-gray-300 transition-colors duration-200 ease-in-out flex flex-col items-center">
-                    <FaExchangeAlt className="mb-1" />
-                    Compare
-                  </button>
-                  <button className="hover:text-gray-300 transition-colors duration-200 ease-in-out flex flex-col items-center">
-                    <FaHeart className="mb-1" />
-                    Like
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-      </div>
-
-      {/* Pagination */}
-      <div className="flex items-center justify-center gap-8 mt-14">
-        {[1, 2, 3].map((page) => (
-          <div
-            key={page}
-            className={`w-[60px] h-[60px] flex items-center justify-center cursor-pointer ${currentPage === page ? "bg-[#B88E2F] text-white" : "bg-[#F9F1E7]"}`}
-            onClick={() => handlePageChange(page)}
-          >
-            {page}
-          </div>
-        ))}
-        <div
-          className="w-[60px] h-[60px] flex items-center justify-center cursor-pointer bg-[#F9F1E7]"
-          onClick={handleNext}
+    <ShopHeader />
+    <div className="min-h-screen bg-gray-100">
+      <div className="container mx-auto px-4 py-6">
+        <header
+          className="relative bg-cover bg-center h-64"
+          style={{ backgroundImage: "url('/shop.jpg')" }}
         >
-          Next
+          <div className="absolute inset-0 bg-opacity-50"></div>
+        </header>
+
+        {/* Filter Toggle Button */}
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 py-8">
+          <h2 className="text-3xl font-bold text-center sm:text-left">
+            Our All Products
+          </h2>
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="bg-gray-800 text-white px-4 py-2 mt-4 sm:mt-0 rounded-md hover:bg-gray-700 transition"
+          >
+            {showFilters ? "Hide Filters" : "Show Filters"}
+          </button>
+        </div>
+
+        {/* Filters Section */}
+        {showFilters && (
+          <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Price Range Filter */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="priceRange"
+                  className="text-gray-600 font-semibold mb-2"
+                >
+                  Max Price:{" "}
+                  <span className="text-gray-800">${priceRange}</span>
+                </label>
+                <input
+                  id="priceRange"
+                  type="range"
+                  min="0"
+                  max="1000"
+                  step="50"
+                  value={priceRange}
+                  onChange={(e) => setPriceRange(Number(e.target.value))}
+                  className="w-full accent-gray-800"
+                />
+              </div>
+
+              {/* Category Filter */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="category"
+                  className="text-gray-600 font-semibold mb-2"
+                >
+                  Category
+                </label>
+                <select
+                  id="category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="bg-gray-100 border rounded px-3 py-2"
+                >
+                  <option value="all">All</option>
+                  <option value="furniture">Furniture</option>
+                  <option value="electronics">Electronics</option>
+                  <option value="clothing">Clothing</option>
+                </select>
+              </div>
+
+              {/* Apply Filter Button */}
+              <div className="flex items-center sm:col-span-2 lg:col-span-1">
+                <button
+                  onClick={applyFilters}
+                  className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition w-full"
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Products Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {paginatedProducts.map((product) => (
+            <Link key={product.id} href={`/product/${product.slug}`}>
+              <div className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-all cursor-pointer">
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  width={500}
+                  height={500}
+                  className="w-full h-60 object-cover mb-4 rounded-lg transition-all"
+                />
+                <h3 className="text-xl font-bold mb-2">{product.name}</h3>
+                <p className="text-gray-600 mb-2">{product.description}</p>
+                <p className="text-lg font-bold mb-4">${product.price}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Pagination Controls */}
+        <div className="flex justify-center items-center mt-8">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-800 text-white rounded-md mr-2 disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="px-4 py-2">{`Page ${currentPage} of ${totalPages}`}</span>
+          <button
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-gray-800 text-white rounded-md ml-2 disabled:opacity-50"
+          >
+            Next
+          </button>
         </div>
       </div>
+      <FeatureSection/>
+    </div>
     </div>
   );
-};
+}
 
-export default ShopPage;
+export default ProductSection;

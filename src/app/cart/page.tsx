@@ -1,153 +1,55 @@
 "use client";
-import React, { useState } from "react";
+
+import Link from "next/link";
 import Image from "next/image";
-import { FaTrash } from "react-icons/fa";
-import { useRouter } from "next/navigation"; // Import useRouter
+import { ChevronRight } from "lucide-react";
+import CartPage from "@/components/cart-page";
+import FeatureSection from "@/components/feacturesSection";
 
-
-function Cart() {
-  const router = useRouter(); // Initialize useRouter
-  const initialCart = [
-    { id: 1, name: "Asgaard Sofa", price: 250.000, image: "/Group 95.png" },
-  ];
-
-  const [cartItems, setCartItems] = useState(initialCart);
-
-  const handleRemoveItem = (id: number) => {
-    const updatedCart = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedCart);
-  };
-
-  const calculateSubtotal = (price: number) => price;
-
-  const calculateTotal = () => {
-    return cartItems.reduce(
-      (total, item) => total + calculateSubtotal(item.price),
-      0
-    );
-  };
-
-  const subtotal = calculateTotal();
-  const shipping = 0;
-  const total = subtotal + shipping;
-
-  // Handle Checkout Navigation
-  const handleCheckout = () => {
-    router.push("/checkout"); // Navigate to the checkout page
-  };
-
+export default function Cart() {
   return (
     <div>
-     <div className="relative">
-  <Image
-    src="/blog.png"
-    alt="Hero Image"
-    width={1400}
-    height={400}
-    className="object-cover w-full h-[300px] sm:h-[400px]"
-  />
-  <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10">
-    <Image
-      src="/logo.png"
-      alt="Logo"
-      width={80}
-      height={80}
-      className="object-contain cursor-pointer sm:w-[100px] sm:h-[100px]"
-    />
-    <h1 className="mt-4 text-2xl sm:text-4xl font-bold text-gray-800">
-       Cart
-    </h1>
-    <p className="mt-2 text-sm sm:text-lg text-gray-600">
-      Home &gt; Cart
-    </p>
-  </div>
+      {/* Hero Section with Breadcrumb */}
+      <div className="relative h-64 sm:h-48 bg-[#F9F1E7] flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
+        <Image
+          src="/images/shop.png" // Correct src for static image in public folder
+          alt="Shop Hero"
+          layout="fill"
+          objectFit="cover"
+          className="opacity-50"
+          priority
+        />
+
+        {/* Overlay Content */}
+        <div className="relative text-center space-y-4 px-4">
+          <Image
+            src="/images/logo.png"
+            width={77}
+            height={77}
+            alt="Furniro"
+            className="mx-auto"
+          />
+          <h1 className="text-4xl font-medium text-gray-900 sm:text-2xl">Cart</h1>
+          <nav className="flex items-center justify-center space-x-2 text-sm">
+            <Link href="/" className="text-gray-600 hover:text-gray-900">
+              Home
+            </Link>
+            <ChevronRight className="h-4 w-4 text-gray-400" />
+            <span className="text-gray-900">Cart</span>
+          </nav>
+        </div>
       </div>
 
-      {/* Main Container */}
-      <div className="container mx-auto p-4 pb-16">
-        {/* Main Flexbox Section - Responsive Cart View */}
-        <div className="flex flex-wrap md:flex-nowrap gap-6 md:gap-8">
-          {/* Cart Items Section */}
-          <div className="w-full md:w-2/3 bg-customCream px-2 py-4 rounded-lg shadow-md">
-            <div className="overflow-auto mb-8 bg-customCream">
-              <table className="min-w-full table-auto border-collapse">
-                <thead>
-                  <tr>
-                    <th className="border px-4 py-2 text-lg bg-selfcolors-lightCream">
-                      Product
-                    </th>
-                    <th className="border px-4 py-2 text-lg bg-selfcolors-lightCream">
-                      Price
-                    </th>
-                    <th className="border px-4 py-2 text-lg bg-selfcolors-lightCream">
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cartItems.map((item) => (
-                    <tr
-                      key={item.id}
-                      className="border-b group hover:bg-gray-100"
-                    >
-                      <td className="px-4 py-2 flex items-center gap-4">
-                        <Image
-                          src={item.image}
-                          alt={item.name}
-                          className="w-16 h-16 object-contain"
-                          width="64"
-                          height="64"
-                        />
-                        <span className="text-lg md:text-base">
-                          {item.name}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2 text-lg md:text-base">
-                        ${item.price}
-                      </td>
-                      <td className="px-4 py-2 flex justify-center items-center">
-                        <button
-                          className="text-selfcolors-darkBrown hover:text-red-800 transition px-2 py-1"
-                          onClick={() => handleRemoveItem(item.id)}
-                        >
-                          <FaTrash className="text-lg" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+      {/* Cart Page */}
+      <div className="px-4 py-8 sm:py-6">
+        <CartPage />
+      </div>
 
-          {/* Cart Summary Section */}
-          <div className="w-full md:w-1/3 bg-selfcolors-customCream shadow-md p-6 border rounded-md">
-            <h2 className="text-gray-900 text-2xl md:text-3xl text-center font-bold mb-4">
-              Cart Summary
-            </h2>
-            <div className="flex justify-between mb-2 text-sm md:text-lg">
-              <span>Subtotal:</span>
-              <span>${subtotal}</span>
-            </div>
-            <div className="flex justify-between mb-2 text-sm md:text-lg">
-              <span>Shipping:</span>
-              <span>Free</span>
-            </div>
-            <div className="flex justify-between mb-4 font-bold text-lg md:text-xl">
-              <span>Total:</span>
-              <span>${total}</span>
-            </div>
-            <button
-              onClick={handleCheckout} // Call handleCheckout on click
-              className="w-full bg-selfcolors-lightCream text-black px-4 py-2 rounded-lg shadow-md border-black border hover:bg-selfcolors-darkBrown transition"
-            >
-              Checkout
-            </button>
-          </div>
-        </div>
+      {/* Features Section */}
+      <div className="space-y-12 px-4 py-8 sm:space-y-8 sm:py-6">
+      <FeatureSection/>
       </div>
     </div>
   );
 }
-
-export default Cart;

@@ -10,11 +10,6 @@ export default {
   theme: {
   	extend: {
   		colors: {
-  			selfcolors: {
-  				customCream: '#FFF3E3',
-  				lightCream: '#F9F1E7',
-  				darkBrown: '#B88E2F'
-  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

@@ -1,13 +1,19 @@
-import React from 'react'
-// import Link from 'next/link'
-import Home from './home/page'
+import HeroSection from "@/components/HeroSection"
+import BrowseSection from "@/components/BrowseSection"
+import InspirationSection from "@/components/inspiration-section"
+import ProductSection from "@/components/product-section"
+import GallerySection from "@/components/gallery-section"
 
-const page = () => {
+
+
+export default function Home() {
   return (
     <div>
-        <Home/>
+      <HeroSection />
+      <BrowseSection />
+      <ProductSection />
+      <InspirationSection />
+      <GallerySection />
     </div>
-  )
+  );
 }
-
-export default page
