@@ -92,26 +92,6 @@ function ProductSection() {
     <ShopHeader />
     <div className="min-h-screen bg-gray-100">
       <div className="container mx-auto px-4 py-6">
-        <header
-          className="relative bg-cover bg-center h-64"
-          style={{ backgroundImage: "url('/shop.jpg')" }}
-        >
-          <div className="absolute inset-0 bg-opacity-50"></div>
-        </header>
-
-        {/* Filter Toggle Button */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 py-8">
-          <h2 className="text-3xl font-bold text-center sm:text-left">
-            Our All Products
-          </h2>
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="bg-gray-800 text-white px-4 py-2 mt-4 sm:mt-0 rounded-md hover:bg-gray-700 transition"
-          >
-            {showFilters ? "Hide Filters" : "Show Filters"}
-          </button>
-        </div>
-
         {/* Filters Section */}
         {showFilters && (
           <div className="bg-white rounded-lg shadow-md p-6 mb-8">
@@ -136,28 +116,6 @@ function ProductSection() {
                   className="w-full accent-gray-800"
                 />
               </div>
-
-              {/* Category Filter */}
-              <div className="flex flex-col">
-                <label
-                  htmlFor="category"
-                  className="text-gray-600 font-semibold mb-2"
-                >
-                  Category
-                </label>
-                <select
-                  id="category"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="bg-gray-100 border rounded px-3 py-2"
-                >
-                  <option value="all">All</option>
-                  <option value="furniture">Furniture</option>
-                  <option value="electronics">Electronics</option>
-                  <option value="clothing">Clothing</option>
-                </select>
-              </div>
-
               {/* Apply Filter Button */}
               <div className="flex items-center sm:col-span-2 lg:col-span-1">
                 <button

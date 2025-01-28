@@ -14,7 +14,7 @@ interface Product {
   slug: string;
 }
 
-export default function ProductSection() {
+export default function OurProducts() {
   const [visibleProductsCount, setVisibleProductsCount] = useState(4); // Initially show 4 products
   const [products, setProducts] = useState<Product[]>([]); // State for products
 

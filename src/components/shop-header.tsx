@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight, SlidersHorizontal, Grid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import CategoryFilter from "./category-filter";
 
 export default function ShopHeader() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -45,10 +46,10 @@ export default function ShopHeader() {
           <div className="flex flex-wrap items-center justify-between gap-4">
             {/* Left Section: Filter and View Mode */}
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" className="flex items-center space-x-2">
-                <SlidersHorizontal className="h-4 w-4" />
-                <span>Filter</span>
-              </Button>
+              <div className="flex items-center space-x-2">
+                <CategoryFilter />
+              </div>
+
               <div className="hidden sm:flex items-center space-x-2">
                 <Button
                   variant={viewMode === "grid" ? "default" : "ghost"}
@@ -65,7 +66,8 @@ export default function ShopHeader() {
               </div>
               <p className="text-sm text-gray-600">
                 Showing {(currentPage - 1) * itemsPerPage + 1}-
-                {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems} results
+                {Math.min(currentPage * itemsPerPage, totalItems)} of{" "}
+                {totalItems} results
               </p>
             </div>
 
