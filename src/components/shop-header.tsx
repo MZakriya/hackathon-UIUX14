@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight, SlidersHorizontal, Grid, List } from "lucide-react";
+import { ChevronRight, Grid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CategoryFilter from "./category-filter";
 
