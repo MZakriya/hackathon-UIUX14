@@ -8,4 +8,8 @@ export interface ProductCart {
   title:string,
   // image: string; // Maybe you had an image property
   price_id: string;
+  slug: {
+    _type: 'slug';
+    current: string;
+  };
 }
