@@ -76,7 +76,12 @@ const Navbar = () => {
         <div className="hidden md:flex items-center space-x-4 text-xl text-gray-700 hover:text-black cursor-pointer">
           <FiUser />
           <FiSearch />
-          <FiHeart />
+          <Link href={"/wishlist"}>
+           <button aria-label="Wishlist" className="p-2 hover:bg-black/5 rounded-full transition-colors">
+           <FiHeart className="w-6 h-6" />
+           </button>
+        
+           </Link>
           <div>
             {/* Cart Icon */}
             <button

@@ -30,7 +30,8 @@ export default function Cart() {
             alt="Furniro"
             className="mx-auto"
           />
-          <h1 className="text-4xl font-medium text-gray-900 sm:text-2xl">Cart</h1>
+          <div className="relative text-center space-y-4">
+          <h1 className="text-4xl font-medium text-gray-900">Cart</h1>
           <nav className="flex items-center justify-center space-x-2 text-sm">
             <Link href="/" className="text-gray-600 hover:text-gray-900">
               Home
@@ -38,6 +39,7 @@ export default function Cart() {
             <ChevronRight className="h-4 w-4 text-gray-400" />
             <span className="text-gray-900">Cart</span>
           </nav>
+        </div>
         </div>
       </div>
 

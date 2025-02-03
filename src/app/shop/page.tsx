@@ -34,7 +34,7 @@ function ProductSection() {
   const [category, setCategory] = useState<string>("all"); // Default category
   const [showFilters, setShowFilters] = useState<boolean>(false); // Toggle filters visibility
 
-  const [currentPage, setCurrentPage] = useState<number>(1); // Current page
+  const [currentPage, setCurrentPage]  = useState<number>(1); // Current page
   
   useEffect(() => {
     const fetchProducts = async () => {

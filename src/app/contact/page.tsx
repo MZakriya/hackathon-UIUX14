@@ -30,6 +30,7 @@ export default function Contact() {
             className="pt"
             alt="Furniro"
           />
+          <div className="relative text-center space-y-4">
           <h1 className="text-4xl font-medium text-gray-900">Contact</h1>
           <nav className="flex items-center justify-center space-x-2 text-sm">
             <Link href="/" className="text-gray-600 hover:text-gray-900">
@@ -38,6 +39,7 @@ export default function Contact() {
             <ChevronRight className="h-4 w-4 text-gray-400" />
             <span className="text-gray-900">Contact</span>
           </nav>
+        </div>
         </div>
       </div>
       <div>

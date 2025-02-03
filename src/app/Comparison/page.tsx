@@ -30,14 +30,16 @@ export default function Comparison() {
             alt="Furniro"
             className="mx-auto"
           />
-          <h1 className="text-4xl font-medium text-gray-900 sm:text-2xl">Product Comparison</h1>
+          <div className="relative text-center space-y-4">
+          <h1 className="text-4xl font-medium text-gray-900">Comparison</h1>
           <nav className="flex items-center justify-center space-x-2 text-sm">
             <Link href="/" className="text-gray-600 hover:text-gray-900">
               Home
             </Link>
             <ChevronRight className="h-4 w-4 text-gray-400" />
-            <span className="text-gray-900">Product Comparison</span>
+            <span className="text-gray-900">Comparison</span>
           </nav>
+        </div>
         </div>
       </div>
       <ProductComparison />

@@ -30,14 +30,16 @@ export default function Checkout() {
             alt="Furniro"
             className="mx-auto"
           />
-          <h1 className="text-4xl font-medium text-gray-900 sm:text-2xl">Product Checkout</h1>
+          <div className="relative text-center space-y-4">
+          <h1 className="text-4xl font-medium text-gray-900">Checkout</h1>
           <nav className="flex items-center justify-center space-x-2 text-sm">
             <Link href="/" className="text-gray-600 hover:text-gray-900">
               Home
             </Link>
             <ChevronRight className="h-4 w-4 text-gray-400" />
-            <span className="text-gray-900">Product Checkout</span>
+            <span className="text-gray-900">Checkout</span>
           </nav>
+        </div>
         </div>
       </div>
       <main className="min-h-screen bg-white">

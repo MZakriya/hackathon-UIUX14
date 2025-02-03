@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 // components/HeroSection.js
 export default function HeroSection() {
   return (
@@ -28,9 +29,11 @@ export default function HeroSection() {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit
             tellus, luctus nec ullamcorper mattis.
           </p>
+          <Link href="/shop">
           <button className="px-6 py-2 bg-[#B88E2F] text-white font-semibold rounded">
             Buy Now
           </button>
+          </Link>
         </div>
 
         {/* Mobile content */}

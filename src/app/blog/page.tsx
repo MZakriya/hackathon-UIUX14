@@ -65,6 +65,7 @@ export default function Blog() {
             className=""
             alt="Furniro"
           />
+          <div className="relative text-center space-y-4">
           <h1 className="text-4xl font-medium text-gray-900">Blog</h1>
           <nav className="flex items-center justify-center space-x-2 text-sm">
             <Link href="/" className="text-gray-600 hover:text-gray-900">
@@ -73,6 +74,7 @@ export default function Blog() {
             <ChevronRight className="h-4 w-4 text-gray-400" />
             <span className="text-gray-900">Blog</span>
           </nav>
+        </div>
         </div>
       </div>
       <div className="container mx-auto px-4 py-12">
