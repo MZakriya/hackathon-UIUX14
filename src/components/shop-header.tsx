@@ -1,18 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight, Grid, List } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import CategoryFilter from "./category-filter";
+import { ChevronRight } from "lucide-react";
 
 export default function ShopHeader() {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const totalItems = 32;
-  const itemsPerPage = 16;
-  const currentPage = 1;
-
   return (
     <div>
       {/* Hero Section with Breadcrumb */}
