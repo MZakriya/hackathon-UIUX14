@@ -31,7 +31,7 @@ export default function Navbar() {
           font-bold font-montserrat text-[25px] ml-20  text-black flex items-center gap-4">
            
             <div className=' '>
-              <Image src={'/logo.png'} alt={'Logo'} height={32} width={50} 
+              <Image src={'/images/logo.png'} alt={'Logo'} height={32} width={50} 
             className='md:w-[40px] md:h-[25px]'></Image></div>
             Furniro
           </h1>

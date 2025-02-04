@@ -1,6 +1,6 @@
 //src\app\confirmation\page.tsx
 import React from "react";
-import Image from "next/image";
+import { ChevronRight } from "lucide-react";
 import {
   Table,
   TableCaption,
@@ -27,7 +27,7 @@ async function Confirmation({
 
   return (
     <div className="min-h-screen bg-white px-4 md:px-8 lg:px-12">
-      <div className="bg-[url('/blogMainImage.png')] bg-cover bg-center py-16 mb-12">
+      <div className="bg-[url('/images/shop.png')] bg-cover bg-center py-16 mb-12">
         <div className="container text-center">
           <div className="inline-block w-16 h-16 bg-[url('/logo1.png')] mb-4" />
           <h1 className="text-3xl md:text-4xl font-medium mb-4 font-poppins">
@@ -37,9 +37,7 @@ async function Confirmation({
             <Link href="/" className="hover:underline">
               Home
             </Link>
-            <span>
-              <Image src="/rightA.png" width={20} height={20} alt="arrow" />
-            </span>
+            <ChevronRight className="h-4 w-4 text-gray-400" />
             <span>Confirmation</span>
           </div>
         </div>
