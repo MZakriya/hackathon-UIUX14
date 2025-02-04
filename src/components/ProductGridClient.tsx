@@ -7,7 +7,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Heart, Share2, ArrowRightLeft } from "lucide-react";
 import { ProductFilterBar } from "@/components/Filterbar";
-import Shopbottombar from "@/components/Shpbottombar";
 import { useAtom } from "jotai";
 import { searchName } from "@/globalState/globalState";
 
@@ -176,8 +175,6 @@ export default function ProductGridClient({
           </Button>
         </div>
       </div>
-
-      <Shopbottombar />
     </>
   );
 }
