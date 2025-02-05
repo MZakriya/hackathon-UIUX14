@@ -22,21 +22,18 @@ export default function Navbar() {
          sm:px-0 ml-[51px] sm:ml-0 flex items-center justify-between h-[41px] mt-[29px]  ">
         
         {/* Logo Section */}
-        <div className="flex items-left  gap-1 exsm:mr-0   xsm:ml-[100px] ">
-          
-          <h1 className="  exsm:ml-5  xsm:text-[30px]  
-            
-          sm:ml-0   
-          md:ml-[-80px]  md:p-0
-          font-bold font-montserrat text-[25px] ml-20  text-black flex items-center gap-4">
-           
-            <div className=' '>
-              <Image src={'/images/logo.png'} alt={'Logo'} height={32} width={50} 
-            className='md:w-[40px] md:h-[25px]'></Image></div>
-            Furniro
-          </h1>
-        </div>
-
+        <Link href="/" className="flex items-center">
+        <div className="text-2xl font-bold text-black flex items-center  ">
+            <Image
+              src="/images/logo.png"
+              width={50}
+              height={50}
+              alt="Furniro"
+              priority
+            />
+            <span>Furniro</span>
+          </div>
+          </Link>
         {/* Navigation Links */}
         <div className="hidden md:flex items-center gap-8 ">
           <Link href="/" className="text-base font-medium font-poppins text-black hover:text-black/70 transition-colors">Home</Link>

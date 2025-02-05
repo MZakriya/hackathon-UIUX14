@@ -1,7 +1,6 @@
 //src\app\productComparison\page.tsx
 
 import React from "react";
-import Image from "next/image";
 export const dynamic = "force-dynamic";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
