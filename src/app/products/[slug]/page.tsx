@@ -23,7 +23,6 @@ async function getData(slug: string): Promise<fullProduct | null> {
 
   try {
     const data = await client.fetch(query, { slug });
-    console.log("Fetched Product Data:", data);
     return data || null;
   } catch (error) {
     console.error("Failed to fetch data:", error);
@@ -51,32 +50,20 @@ async function getRelatedProducts(): Promise<fullProduct[]> {
   }
 }
 
-export default function ProductPage({ params }: { params: { slug: string } }) {
-  const [slug, setSlug] = useState<string | null>(null);
+interface ProductPageProps {
+  params: { slug: string };
+}
+
+export default function ProductPage({ params }: ProductPageProps) {
   const [data, setData] = useState<fullProduct | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<fullProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    // Resolve params if it's a promise
-    if (params instanceof Promise) {
-      params
-        .then((resolvedParams) => {
-          setSlug(resolvedParams.slug);
-        })
-        .catch(console.error);
-    } else {
-      setSlug(params.slug);
-    }
-  }, [params]);
-
-  useEffect(() => {
-    if (!slug) return;
-
     const fetchData = async () => {
       setIsLoading(true);
-      const productData = await getData(slug);
+      const productData = await getData(params.slug);
       setData(productData);
       const related = await getRelatedProducts();
       setRelatedProducts(related);
@@ -84,7 +71,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
     };
 
     fetchData();
-  }, [slug]);
+  }, [params.slug]);
 
   if (isLoading) {
     return (
