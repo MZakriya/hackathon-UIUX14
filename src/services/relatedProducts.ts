@@ -1,7 +1,7 @@
 "use server"
 import { client } from "@/sanity/lib/client"
 
-export async function getProducts() {
+export async function relatedProducts() {
   const products = await client.fetch(`
     *[_type=='product'][] {
       'productImage': productImage.asset->url,

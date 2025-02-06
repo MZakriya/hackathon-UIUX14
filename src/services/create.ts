@@ -53,3 +53,25 @@ export const deleteComment = async (_id: string, paramsId: number) =>{
 
     return await myFetch(paramsId);
 }
+
+
+
+//------create userdata
+
+// --------------------------------------------------------------create
+interface User {
+  name: string;
+  email: string;
+  password: string;
+  id: number;
+}
+
+export const createUser = async (newUser: User) =>{
+    
+  await client.create({  
+    _type: 'login',
+    ...newUser,
+  })
+    
+    return await myFetch(newUser.id);
+}

@@ -3,7 +3,20 @@ import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import Spmain from '@/components/Spmain';
 import Productdetails from '@/components/Productdetails';
-import Relatedproducts from '@/components/Relatedproducts';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Image from 'next/image';
+import { relatedProducts } from '@/services/relatedProducts';
+
+interface ProductSection {
+  title: string;
+  description: string;
+  isNew: boolean;
+  tags: string[];
+  price: number;
+  productImage: string;
+  discountPercentage: number;
+  _id: string;
+}
 
 async function Singleproduct(
   props: { 
@@ -31,6 +44,7 @@ async function Singleproduct(
     isNew
   } = searchParams;
 
+  const cards:ProductSection[] = await relatedProducts();
   return (
     <>
       {/* Breadcrumb Navigation Section */}
@@ -88,7 +102,59 @@ async function Singleproduct(
       />
 
       {/* Related Products Section */}
-      <Relatedproducts />
+       {/*related product section */}
+       <section className="py-12">
+      <div className="container px-4 md:px-6">
+        <h2 className="text-3xl font-bold text-center mb-10">Related Products </h2>
+      </div>
+       <Carousel
+      
+      opts={{
+        align: "start",
+        loop: true,
+      }}
+      
+      
+      className="w-[1236px] m-auto ">
+        <CarouselContent className="flex overflow-x-auto space-x-4">
+          {(cards.reverse()).map((item:ProductSection ,index:number) =>{
+            
+            return(
+<CarouselItem key={index} className="flex-none w-[285px]">
+              <div className="bg-white border border-gray-200 rounded-lg shadow">
+                <div className="relative w-full h-[301px] overflow-hidden rounded-t-lg">
+                  <Image
+                    src={item.productImage}
+                    alt={item.title}
+                    fill
+                    className="object-center"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-gray-900">{item.title}</h3>
+                  <p className="text-sm text-gray-500">{item.description.slice(0,20)}...</p>
+                  <div className="mt-2 flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-900">
+                      Rs.{item.price}
+                    </span>
+                    
+                  </div>
+                </div>
+              </div>
+            </CarouselItem>
+            )} )}
+        </CarouselContent>
+      </Carousel> 
+   
+      <div className="flex justify-center mt-10">
+        <Link
+          href="/shop"
+          className="inline-flex items-center justify-center px-8 py-3 border border-[#b88e2f] hover:bg-[#b88e2f] hover:text-white transition-colors text-[#b88e2f]"
+        >
+          Search More
+        </Link>
+      </div>
+    </section>
     </>
   );
 }
